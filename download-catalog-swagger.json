@@ -1,0 +1,80 @@
+openapi: 3.0.1
+info:
+  title: Download Catalog Service
+  termsOfService: 'https://www.dell.com/learn/us/en/uscorp1/site-terms-of-use-copyright'
+  contact:
+    name: SATD_API_TEAM
+    email: satd_api_engineering@dell.com
+  version: v 3.0.0
+servers:
+  - url: 'https://10.49.71.116:8080/download-catalog-service-0.0.5'
+    description: Generated server url
+paths:
+  '/download/{revision}/{catalogID}':
+    get:
+      tags:
+        - DOWNLOAD_CATALOG
+      summary: download catalog signed file
+      operationId: downloadCatalogFile
+      parameters:
+        - name: catalogID
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: revision
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: accessToken
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: SupportAssistinTD-API-Key
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Failed operation
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - API-Key: []
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        txnId:
+          type: string
+  securitySchemes:
+    API-Key:
+      type: apiKey
+      description: API Key
+      name: API-Key
+      in: header
